@@ -59,8 +59,8 @@ class TMDBClient:
         return self._get(f"/movie/{movie_id}", append_to_response="credits,videos,reviews,watch/providers") or {}
 
 
-@st.cache_resource
 def client() -> TMDBClient:
+    """Create a fresh lightweight client so Cloud Secrets changes take effect immediately."""
     return TMDBClient()
 
 
