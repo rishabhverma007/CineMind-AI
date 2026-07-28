@@ -8,13 +8,16 @@ load_dotenv()
 
 
 def _tmdb_key() -> str:
-    """Read local .env credentials first, then Streamlit Cloud Secrets."""
-    if key := os.getenv("TMDB_API_KEY", "").strip():
-        return key
+    """Read a local .env key or the root-level Streamlit Cloud secret."""
+    local_key = os.getenv("TMDB_API_KEY", "").strip()
+    if local_key:
+        return local_key
     try:
-        return str(st.secrets.get("TMDB_API_KEY", "")).strip()
+        if "TMDB_API_KEY" in st.secrets:
+            return str(st.secrets["TMDB_API_KEY"]).strip()
     except Exception:
-        return ""
+        pass
+    return ""
 
 
 class TMDBClient:
